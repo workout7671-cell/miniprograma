@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Modern HTML Form</title>
+    <style>
+        /* Анимированный живой фон */
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Стеклянный эффект для карточки */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 { color: #333; margin-bottom: 25px; font-weight: 800; }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            box-sizing: border-box;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        input:focus { border-color: #e73c7e; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-main { background: #333; color: white; }
+        .btn-main:hover { background: #e73c7e; transform: translateY(-2px); }
+
+        #result {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>✨ РЕГИСТРАЦИЯ</h2>
+    
+    <input type="text" id="surname" placeholder="Фамилия">
+    <input type="text" id="name" placeholder="Имя">
+    <input type="text" id="patronymic" placeholder="Отчество">
+
+    <div style="display: flex; gap: 8px;">
+        <input type="number" id="day" placeholder="ДД" min="1" max="31">
+        <select id="month">
+            <option value="0">Январь</option><option value="1">Февраль</option>
+            <option value="2">Март</option><option value="3">Апрель</option>
+            <option value="4">Май</option><option value="5">Июнь</option>
+            <option value="6">Июль</option><option value="7">Август</option>
+            <option value="8">Сентябрь</option><option value="9">Октябрь</option>
+            <option value="10">Ноябрь</option><option value="11">Декабрь</option>
+        </select>
+        <input type="number" id="year" placeholder="ГГГГ" value="2010">
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-main" onclick="run()">Создать аккаунт</button>
+    </div>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function run() {
+        const s = document.getElementById('surname').value.trim();
+        const n = document.getElementById('name').value.trim();
+        const p = document.getElementById('patronymic').value.trim();
+        const d = parseInt(document.getElementById('day').value);
+        const m = parseInt(document.getElementById('month').value);
+        const y = parseInt(document.getElementById('year').value);
+
+        if(!s || !n || !d || !y) {
+            alert("Заполни все поля!");
+            return;
+        }
+
+        const today = new Date();
+        let age = today.getFullYear() - y;
+        if (today.getMonth() < m || (today.getMonth() === m && today.getDate() < d)) age--;
+
+        const getWord = (a) => (a%10==1 && a%100!=11) ? 'год' : ([2,3,4].includes(a%10) && ![12,13,14].includes(a%100)) ? 'года' : 'лет';
+
+        const res = document.getElementById('result');
+        res.style.display = 'block';
+        res.innerHTML = `<b>Готово!</b><br>👤 ${s} ${n} ${p}<br>🎂 Родился: ${d}.${m+1}.${y}<br>💎 Возраст: ${age} ${getWord(age)}`;
+    }
+</script>
+
+</body>
+</html>
